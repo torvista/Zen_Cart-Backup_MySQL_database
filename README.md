@@ -1,7 +1,7 @@
 # Backup-MySQL-for-Zen-Cart
 
 Add-On: BACKUP_MYSQL Admin Tool 
-Designed for: Zen Cart v1.5.x series (tested on Zen Cart 1.56a/php7.4)
+Designed for: Zen Cart v1.5.x series (tested on Zen Cart 1.56a/php7.3)
 Created by: DrByte
 
 This essential tool provides an Admin-based interface to 
