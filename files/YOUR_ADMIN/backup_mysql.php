@@ -700,7 +700,7 @@ if (zen_not_null($action)) {
                                         <td class="smallText right"><?php
 
                                             if (($action != 'backup') && (isset($dir)) && !ini_get('safe_mode') && $dir_ok == true) {
-                                                echo '<a href="' . zen_href_link(FILENAME_BACKUP_MYSQL, 'action=backup' . ($tables_to_export != '') ? '&tables=' . str_replace(' ', ',', $tables_to_export) : '') . '">' . zen_image_button('button_backup.gif', IMAGE_BACKUP) . '</a>&nbsp;&nbsp;';
+                                                echo '<a href="' . zen_href_link(FILENAME_BACKUP_MYSQL, 'action=backup' . ($tables_to_export != '' ? '&tables=' . str_replace(' ', ',', $tables_to_export) : '')) . '">' . zen_image_button('button_backup.gif', IMAGE_BACKUP) . '</a>&nbsp;&nbsp;';
                                             }
 
                                             if (($action != 'restorelocal') && isset($dir)) {
