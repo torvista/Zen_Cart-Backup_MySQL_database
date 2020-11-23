@@ -111,12 +111,11 @@ If the restored database came from another server, the value of SESSION_WRITE_DI
 ===========================================================
 
 CHANGELOG:
-2020-11-23 - torvista: added define for ICON_FILE_DOWNLOAD (removed from core in ZC157).
-2017-02-15	-	torvista:
-more stuff for php 7.3
+2020-11-23 - torvista: added defines for ICON_FILE_DOWNLOAD, IMAGE_BACKUP, IMAGE_RESTORE (removed from core in ZC157) and 'backup' directory (removed in ZC158). Many changes based on IDE inspections/recommendations.
 
-2017-02-15	-	torvista: 
+2017-02-15 - torvista:more stuff for php 7.3
 
+2017-02-15 - torvista: 
 - added option to add a suffix to backup filename
 - changed mysql to mysqli
 - added support for gzip and zip restores in windows
@@ -128,40 +127,40 @@ more stuff for php 7.3
 - added debug info option tickbox (at foot of file)
 - changed to html5, removed obsolete formatting tags
 
-2012-07-03	-	v1.5a - to better detect and avoid display of files that aren't related to backups.
+2012-07-03 - v1.5a - to better detect and avoid display of files that aren't related to backups.
 
-2011-12-09	-	v1.5 - with additional file to register page for 1.5.0.
+2011-12-09 - v1.5 - with additional file to register page for 1.5.0.
 
-2010-06-01	-	v1.4 - includes PHP 5.3 fixes and smarter detection of whether exec() is disabled.
+2010-06-01 - v1.4 - includes PHP 5.3 fixes and smarter detection of whether exec() is disabled.
 
-2008-01-04	-	1.3.5, compression improvements.
+2008-01-04 - 1.3.5, compression improvements.
 
-2007-04-28	-	Updated contrib to new version number: 1.3 -- auto-handles lock-tables limitations and various bugfixes.
+2007-04-28 - Updated contrib to new version number: 1.3 -- auto-handles lock-tables limitations and various bugfixes.
 
-2006-02-28	-	Completed support for individual table export (&tables=xxx,xxxx,xxxx) and added more tweaks for IIS support.
+2006-02-28 - Completed support for individual table export (&tables=xxx,xxxx,xxxx) and added more tweaks for IIS support.
 
-2006-01-10	-	Small typo fixed related to open_basedir detection.
+2006-01-10 - Small typo fixed related to open_basedir detection.
 
-2005-12-30	-	Updated to allow more overrides in compression options, to detect failures due to Win2003 limitations, etc.
+2005-12-30 - Updated to allow more overrides in compression options, to detect failures due to Win2003 limitations, etc.
 
-2005-11-12	-	Updated to default to typical binary names if none found -- attempted safe-mode workaround.
+2005-11-12 - Updated to default to typical binary names if none found -- attempted safe-mode workaround.
 
-2005-11-10	-	Now accommodates path-names containing spaces (Windows hosts).
+2005-11-10 - Now accommodates path-names containing spaces (Windows hosts).
 
-2005-07-21	-	Tiny update to predeclare some vars for Windows hosts.
+2005-07-21 - Tiny update to predeclare some vars for Windows hosts.
 
-2005-07-21	-	Updated to allow option to "skip locks" in case your host has not given you the "LOCK TABLES" permission.
+2005-07-21 - Updated to allow option to "skip locks" in case your host has not given you the "LOCK TABLES" permission.
 
-2005-07-20	-	Set GZIP on by default for new backups, and fixed logic bug on path detection (thanks to masterblaster).
+2005-07-20 - Set GZIP on by default for new backups, and fixed logic bug on path detection (thanks to masterblaster).
 
-2005-03-21	-	Added exclusion for "index.php" in listing of backup archives.
+2005-03-21 - Added exclusion for "index.php" in listing of backup archives.
 
-2004-09-25	-	Added additional search paths for finding binaries, as well as more error-checking.
+2004-09-25 - Added additional search paths for finding binaries, as well as more error-checking.
 
-2004-08-18	-	Modified script to work on servers where database is hosted remotely.
+2004-08-18 - Modified script to work on servers where database is hosted remotely.
 
-2004-08-17	-	Added additional error-checking output for better indication of causes of failures.
+2004-08-17 - Added additional error-checking output for better indication of causes of failures.
 
-2004-08-04	-	Added additional search paths for finding binaries to be executed.
+2004-08-04 - Added additional search paths for finding binaries to be executed.
 
-2004-08-01	-	Initial Release.
+2004-08-01 - Initial Release.
