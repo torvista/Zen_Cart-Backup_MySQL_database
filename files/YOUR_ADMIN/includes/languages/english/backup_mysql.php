@@ -1,5 +1,5 @@
 <?php
-// 
+//
 // +----------------------------------------------------------------------+
 // |zen-cart Open Source E-commerce                                       |
 // +----------------------------------------------------------------------+
@@ -82,3 +82,4 @@ define('WARNING_MYSQL_NOT_FOUND','WARNING: "<strong>mysql</strong>" binary not f
 define('WARNING_MYSQLDUMP_NOT_FOUND','WARNING: "<strong>mysqldump</strong>" binary not found. <strong>Backups</strong> may not work.<br />Please set full path to MYSQLDUMP binary in extra_datafiles/backup_mysql.php');
 define('TEXT_TEMP_SQL_DELETED','Temporary .sql file deleted');
 define('TEXT_TEMP_SQL_NOT_DELETED','Temporary .sql file NOT deleted');
+define('ICON_FILE_DOWNLOAD', 'download');//removed from core code ZC157

@@ -1,7 +1,7 @@
-# Backup-MySQL-for-Zen-Cart
+# Backup MySQL for Zen Cart
 
-Add-On: BACKUP_MYSQL Admin Tool 
-Designed for: Zen Cart v1.5.x series (tested on Zen Cart 1.56a/php7.3)
+Plugin: BACKUP_MYSQL Admin Tool 
+Designed for: Zen Cart v1.5.x series (tested up to Zen Cart 1.58)
 Created by: DrByte
 
 This essential tool provides an Admin-based interface to 
@@ -13,7 +13,7 @@ Donations:  Please support Zen Cart!  paypal@zen-cart.com  - Thank you!
 Support thread for the ORIGINAL mod
 https://www.zen-cart.com/showthread.php?35714-Backup-MySQL-Database
 
-This fileset has been extensively modified from the versions in the Plugins...see the changelog below.
+This fileset has been extensively modified from the version in the Plugins...see the changelog below.
 
 INSTALLATION
 
@@ -111,6 +111,7 @@ If the restored database came from another server, the value of SESSION_WRITE_DI
 ===========================================================
 
 CHANGELOG:
+2020-11-23 - torvista: added define for ICON_FILE_DOWNLOAD (removed from core in ZC157).
 2017-02-15	-	torvista:
 more stuff for php 7.3
 

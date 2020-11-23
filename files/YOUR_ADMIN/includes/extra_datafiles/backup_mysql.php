@@ -21,3 +21,4 @@ define('MYSQLDUMP_EXE', '/usr/bin/mysqldump');  // used for backups
 // eg C:/wamp/bin/mysql/mysql5.6.12/bin/mysql.exe' or C:/xampp/mysql/bin/mysql.exe'
 define('MYSQL_EXE_LOCAL',     'C:/wamp/bin/mysql/mysql5.6.12/bin/mysql.exe');  // used for restores
 define('MYSQLDUMP_EXE_LOCAL', 'C:/wamp/bin/mysql/mysql5.6.12/bin/mysqldump.exe');  // used for backups
+
