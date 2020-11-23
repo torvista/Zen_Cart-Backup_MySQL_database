@@ -1,25 +1,9 @@
 <?php
-// 
-// +----------------------------------------------------------------------+
-// |zen-cart Open Source E-commerce                                       |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 2003-2010 The zen-cart developers                           |
-// |                                                                      |
-// | http://www.zen-cart.com/index.php                                    |
-// |                                                                      |
-// | Portions Copyright (c) 2003 osCommerce                               |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the GPL license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available through the world-wide-web at the following url:           |
-// | http://www.zen-cart.com/license/2_0.txt.                             |
-// | If you did not receive a copy of the zen-cart license and are unable |
-// | to obtain it through the world-wide-web, please send a note to       |
-// | license@zen-cart.com so we can mail you a copy immediately.          |
-// +----------------------------------------------------------------------+
-//  $Id: backup_mysql.php 2104-12-13
-//
+// $Id: backup_mysql.php modified 2020-11-23 torvista $
 
+if (!defined('FILENAME_BACKUP')) {//was removed from core ZC158
+    define('FILENAME_BACKUP', 'backup');
+}
 define('FILENAME_BACKUP_MYSQL', 'backup_mysql');
 
 // Set this to 'true' if the zip options aren't appearing while doing a backup, and you are certain that gzip support exists on your server
@@ -28,7 +12,7 @@ define('COMPRESS_OVERRIDE','false');
 
 // define the locations of the mysql utilities.  Use FORWARD slashes /.
 
-// Typical hosting Unix/Linux location is in '/usr/bin/' ... but not on Windows servers.	
+// Typical hosting Unix/Linux location is in '/usr/bin/' ... but not on Windows servers.
 // try 'c:/mysql/bin/mysql.exe' and 'c:/mysql/bin/mysqldump.exe' on Windows hosts ... change drive letter and path as needed
 define('MYSQL_EXE',     '/usr/bin/mysql');  // used for restores
 define('MYSQLDUMP_EXE', '/usr/bin/mysqldump');  // used for backups

@@ -1,27 +1,10 @@
 <?php
 $debug = false; //anything except false will show debug info
 //
+//Cron tried but admin path error/not used
+//usr/local/bin/ea-php71 -c /home/motorvista/public_html/tienda/aGaqvp2xwM3p3fGZE/php.ini -q /home/motorvista/public_html/tienda/aGaqvp2xwM3p3fGZE/backup_mysql.php
 //
-//
-//
-// +----------------------------------------------------------------------+
-// |zen-cart Open Source E-commerce                                       |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 2003 The zen-cart developers                           |
-// |                                                                      |
-// | http://www.zen-cart.com/index.php                                    |
-// |                                                                      |
-// | Portions Copyright (c) 2003 osCommerce                               |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the GPL license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available through the world-wide-web at the following url:           |
-// | http://www.zen-cart.com/license/2_0.txt.                             |
-// | If you did not receive a copy of the zen-cart license and are unable |
-// | to obtain it through the world-wide-web, please send a note to       |
-// | license@zen-cart.com so we can mail you a copy immediately.          |
-// +----------------------------------------------------------------------+
-// $Id: backup_mysql.php modified 2019-06-17 torvista $
+// $Id: backup_mysql.php modified 2020-11-23 torvista $
 //
 //
 //Windows System Error Codes https://msdn.microsoft.com/en-us/library/windows/desktop/ms681381(v=vs.85).aspx
@@ -90,7 +73,7 @@ if ( $exec_disabled || ($shell_exec_disabled) ) {
 // Do NOT change these test paths here ... edit/correct the paths in the extra_datafiles/backup_mysql.php file instead.
 
 // Try and get some paths automatically
-
+$windows_mysql_path = '';
 if ($os=="win") { //Windows
     $basedir_result = $db->Execute("SHOW VARIABLES LIKE 'basedir'");
     while (!$basedir_result->EOF) {
@@ -264,7 +247,7 @@ if (zen_not_null($action)) {
             //- In PHP/5.2 and older you have to surround the full command plus arguments in double quotes
             //- In PHP/5.3 and greater you don't have to (if you do, your script will break)
 
-            //this is the actual mysqldump. Steve removed @:why hide errors?
+            //this is the actual mysqldump. Steve removed @: why hide errors?
             $resultcodes = exec($toolfilename . $dump_params, $output, $dump_results);//$dump_results is number returned by operating system: anything other than 0 is a fail
             //Windows System Error Codes https://msdn.microsoft.com/en-us/library/windows/desktop/ms681381(v=vs.85).aspx
             //UNIX Exit codes http://www.faqs.org/docs/abs/HTML/exitcodes.html
@@ -277,9 +260,9 @@ if (zen_not_null($action)) {
             if ((zen_not_null($dump_results) && $dump_results != '0')) $messageStack->add_session(TEXT_RESULT_CODE . ' ($dump_results) ' . $dump_results, 'error');
 
             // parse the value that comes back from the script
-
             if (zen_not_null($resultcodes)) {
-                list($strA, $strB) = preg_split('/[|]/', $resultcodes);
+                if ($debug) $messageStack->add_session('$resultcodes:' . '<br>' . mv_printVar($resultcodes));
+                list($strA, $strB) = array_pad(explode('|', $value, 2), 2, null);//steve php notice when only one value
                 //$array = print_r($resultcodes, true);if ($debug) $messageStack->add('$resultcodes: ' . $array, 'error');
                 if ($debug) $messageStack->add_session('$resultcodes valueA: ' . $strA, 'error');
                 if ($debug) $messageStack->add_session('$resultcodes valueB: ' . $strB, 'error');
@@ -447,8 +430,8 @@ if (zen_not_null($action)) {
 
                 // parse the value that comes back from the script
 
-                if (zen_not_null($resultcodes)) {
-                    list($strA, $strB) = preg_split('/[|]/', $resultcodes);
+                if (zen_not_null($resultcodes)) { // what gets returned from exec() depends on the program that was run
+                    list($strA, $strB) = array_pad(explode('|', $value, 2), 2, null);//steve php notice if only one value returned
                     $messageStack->add_session("valueA: " . $strA, 'error');
                     $messageStack->add_session("valueB: " . $strB, 'error');
                 }
