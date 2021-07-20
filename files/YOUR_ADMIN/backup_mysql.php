@@ -286,8 +286,8 @@ if (zen_not_null($action)) {
             if (zen_not_null($resultcodes)) {
                 if ($debug) {
                     $messageStack->add_session('$resultcodes:' . '<br>' . mv_printVar($resultcodes));
-                }//todo steve $value?
-                [$strA, $strB] = array_pad(explode('|', $value, 2), 2, null);//steve php notice when only one value
+                }
+                [$strA, $strB] = array_pad(explode('|', $resultcodes, 2), 2, null);//steve php notice when only one value
                 //$array = print_r($resultcodes, true);if ($debug) $messageStack->add('$resultcodes: ' . $array, 'error');
                 if ($debug) {
                     $messageStack->add_session('$resultcodes valueA: ' . $strA);
@@ -465,9 +465,8 @@ if (zen_not_null($action)) {
                 exec('exit(0)');
 
                 // parse the value that comes back from the script
-//todo steve $value??
                 if (zen_not_null($resultcodes)) { // what gets returned from exec() depends on the program that was run
-                    [$strA, $strB] = array_pad(explode('|', $value, 2), 2, null);//steve php notice if only one value returned
+                    [$strA, $strB] = array_pad(explode('|', $resultcodes, 2), 2, null);//steve php notice if only one value returned
                     $messageStack->add_session('valueA: ' . $strA);
                     $messageStack->add_session('valueB: ' . $strB);
                 }
