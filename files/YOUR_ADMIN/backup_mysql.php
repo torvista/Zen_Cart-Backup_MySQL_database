@@ -32,8 +32,8 @@ if (stripos(PHP_OS_FAMILY, "win") !== false) { //Windows
 $possibles = [];
 $dump_params = '';
 
-$tables_to_export = (isset($_GET['tables']) && $_GET['tables'] != '') ? str_replace(',', ' ', $_GET['tables']) : '';
-$redirect = (isset($_GET['returnto']) && $_GET['returnto'] != '') ? $_GET['returnto'] : '';
+$tables_to_export = !empty($_GET['tables']) ? str_replace(',', ' ', $_GET['tables']) : ''; //unused!!
+$redirect = !empty($_GET['returnto']) ? $_GET['returnto'] : ''; //unused!!
 $resultcodes = '';
 $_POST['compress'] = (isset($_REQUEST['compress'])) ? $_REQUEST['compress'] : false;
 $strA = '';
@@ -254,7 +254,7 @@ if (zen_not_null($action)) {
             $dump_params .= (($tables_to_export === '') ? '' : ' --tables ' . $tables_to_export);
             $dump_params .= ' 2>&1';// ensures console output is sent to the $output array
 
-            $toolfilename = (isset($_GET['tool']) && $_GET['tool'] != '') ? $_GET['tool'] : $mysqldump_exe;
+            $toolfilename = !empty($_GET['tool']) ? $_GET['tool'] : $mysqldump_exe;
 
             // remove " marks in parameters for friendlier IIS support
 //REQUIRES TESTING:        if (strstr($toolfilename,'.exe')) $dump_params = str_replace('"','',$dump_params);
@@ -274,11 +274,11 @@ if (zen_not_null($action)) {
             exec('exit(0)');//terminates the current script successfully
 
             //Exit code = -1? Cannot find any reference to -1
-            if ($dump_results == -1) {
+            if ($dump_results === -1) {
                 $messageStack->add_session(FAILURE_BACKUP_FAILED_CHECK_PERMISSIONS . TEXT_COMMAND_RUN . $toolfilename . str_replace('--password=' . DB_SERVER_PASSWORD, '--password=*****', str_replace('2>&1', '', $dump_params)));
             }//hide password
 
-            if ($dump_results != '0' && zen_not_null($dump_results)) {
+            if ($dump_results !== 0 && zen_not_null($dump_results)) {
                 $messageStack->add_session(TEXT_RESULT_CODE . ' ($dump_results) ' . $dump_results);
             }
 
@@ -305,10 +305,10 @@ if (zen_not_null($action)) {
                 }
             }
 
-            if (($dump_results == '0' || $dump_results === '') && file_exists(DIR_FS_BACKUP . $backup_file)) { // display success message noting that MYSQLDUMP was used
+            if (($dump_results === 0 || $dump_results === '') && file_exists(DIR_FS_BACKUP . $backup_file)) { // display success message noting that MYSQLDUMP was used
                 $messageStack->add_session('<a href="' . ((ENABLE_SSL_ADMIN === 'true') ? DIR_WS_HTTPS_ADMIN : DIR_WS_ADMIN) . 'backups/' . $backup_file . '">' . SUCCESS_DATABASE_SAVED . '</a>', 'success');
 
-            } elseif ($dump_results == '127') {//127 = command not found
+            } elseif ($dump_results === 127) {//127 = command not found
                 $messageStack->add_session(FAILURE_DATABASE_NOT_SAVED_UTIL_NOT_FOUND);
 
             } elseif (stripos($strA, 'Access denied') !== false && stripos($strA, 'LOCK TABLES') !== false) {
@@ -382,7 +382,7 @@ if (zen_not_null($action)) {
             zen_set_time_limit(300);
             $specified_restore_file = $_GET['file'] ?? '';
 
-            if ($specified_restore_file != '' && file_exists(DIR_FS_BACKUP . $specified_restore_file)) {
+            if ($specified_restore_file !== '' && file_exists(DIR_FS_BACKUP . $specified_restore_file)) {
                 $restore_file = DIR_FS_BACKUP . $specified_restore_file;
                 //TODO better way to get extension to further flag warning if missing .sql. for compressed files.
                 $extension = substr($specified_restore_file, -3);
@@ -453,7 +453,7 @@ if (zen_not_null($action)) {
             //DEBUG echo $mysql_exe . ' ' . $load_params;
 
             if ($specified_restore_file !== '' && file_exists($restore_from)) {
-                $toolfilename = (isset($_GET['tool']) && $_GET['tool'] != '') ? $_GET['tool'] : $mysql_exe;
+                $toolfilename = !empty($_GET['tool']) ? $_GET['tool'] : $mysql_exe;
 
                 // remove " marks in parameters for friendlier IIS support
 //REQUIRES TESTING:          if (strstr($toolfilename,'.exe')) $load_params = str_replace('"','',$load_params);
@@ -471,7 +471,7 @@ if (zen_not_null($action)) {
                     $messageStack->add_session('valueB: ' . $strB);
                 }
 
-                if ($load_results != '0' && zen_not_null($load_results)) {
+                if ($load_results !== 0 && zen_not_null($load_results)) {
                     $messageStack->add_session(TEXT_RESULT_CODE . $load_results, 'caution');
                 }
 
@@ -483,7 +483,7 @@ if (zen_not_null($action)) {
                     }
                 }
 
-                if ($load_results == '0') {
+                if ($load_results === 0) {
                     // store the last-restore-date, if successful. Update key if exists rather than delete and insert.
                     $db->Execute("INSERT INTO " . TABLE_CONFIGURATION . "
                     (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES
@@ -590,7 +590,7 @@ if (zen_not_null($action)) {
             <table style="width: 100%">
                 <tr style="vertical-align: top">
                     <td>
-                        <?php if ($dir_ok == true) { //otherwise generates debug logs ?>
+                        <?php if ($dir_ok === true) { //otherwise generates debug logs ?>
                             <table style="width:100%">
                                 <tr class="dataTableHeadingRow">
                                     <td class="dataTableHeadingContent"><?php
@@ -623,7 +623,7 @@ if (zen_not_null($action)) {
                                     $entry = $contents[$i];
                                     $check = 0;
 
-                                    if ((!isset($_GET['file']) || (isset($_GET['file']) && ($_GET['file'] == $entry))) && !isset($buInfo) && ($action !== 'backup') && ($action !== 'restorelocal')) {
+                                    if ((!isset($_GET['file']) || (isset($_GET['file']) && ($_GET['file'] === $entry))) && !isset($buInfo) && ($action !== 'backup') && ($action !== 'restorelocal')) {
                                         $file_array['file'] = $entry;
                                         $file_array['date'] = date(PHP_DATE_TIME_FORMAT, filemtime(DIR_FS_BACKUP . $entry));
                                         $file_array['size'] = number_format(filesize(DIR_FS_BACKUP . $entry)) . ' bytes';
@@ -642,7 +642,7 @@ if (zen_not_null($action)) {
                                         $buInfo = new objectInfo($file_array);
                                     }
 
-                                    if (isset($buInfo) && is_object($buInfo) && ($entry == $buInfo->file)) {
+                                    if (isset($buInfo) && is_object($buInfo) && ($entry === $buInfo->file)) {
                                         echo '              <tr id="defaultSelected" class="dataTableRowSelected" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)">' . "\n";
                                         $onclick_link = 'file=' . $buInfo->file . '&amp;action=restore';
                                     } else {
@@ -674,7 +674,7 @@ if (zen_not_null($action)) {
                                         ?> bytes
                                     </td>
                                     <td class="dataTableContent center"><?php
-                                        if (isset($buInfo) && is_object($buInfo) && ($entry == $buInfo->file)) {
+                                        if (isset($buInfo) && is_object($buInfo) && ($entry === $buInfo->file)) {
                                             echo zen_image(DIR_WS_IMAGES . 'icon_arrow_right.gif', '');
                                         } else {
                                             echo '<a href="' . zen_href_link(FILENAME_BACKUP_MYSQL, 'file=' . $entry) . '">' . zen_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>';
@@ -851,7 +851,7 @@ if (zen_not_null($action)) {
                                 ];
                                 $contents[] = [
                                     'align' => 'center',
-                                    'text' => '<a href="' . zen_href_link(FILENAME_BACKUP_MYSQL, 'file=' . $buInfo->file . '&amp;action=restore') . '">' . zen_image_button('button_restore.gif', IMAGE_RESTORE) . '</a> ' . (($dir_ok == true && $exec_disabled == false) ? '<a href="' . zen_href_link(FILENAME_BACKUP_MYSQL, 'file=' . $buInfo->file . '&amp;action=delete') . '">' . zen_image_button('button_delete.gif', IMAGE_DELETE) . '</a>' : '')
+                                    'text' => '<a href="' . zen_href_link(FILENAME_BACKUP_MYSQL, 'file=' . $buInfo->file . '&amp;action=restore') . '">' . zen_image_button('button_restore.gif', IMAGE_RESTORE) . '</a> ' . (($dir_ok === true && $exec_disabled === false) ? '<a href="' . zen_href_link(FILENAME_BACKUP_MYSQL, 'file=' . $buInfo->file . '&amp;action=delete') . '">' . zen_image_button('button_delete.gif', IMAGE_DELETE) . '</a>' : '')
                                 ];
                                 $contents[] = [
                                     'text' => '<br>' . TEXT_INFO_DATE . ' ' . $buInfo->date
