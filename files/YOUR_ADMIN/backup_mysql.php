@@ -52,7 +52,7 @@ $open_basedir = ini_get('open_basedir');
 if ($open_basedir !== '') {
     $basedir_check_array = explode(':', $open_basedir);
     foreach ($basedir_check_array as $basedir_check) {
-        if (strpos(DIR_FS_ADMIN, $basedir_check) === false) {
+        if (!str_contains(DIR_FS_ADMIN, $basedir_check)) {
             $flag_basedir = true;
         }
     }
@@ -334,7 +334,7 @@ if (zen_not_null($action)) {
                         $backup_file .= '.zip';
                 }
 
-                if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
+                if (str_contains($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
                     header('Content-Type: application/octetstream');
 //            header('Content-Disposition: inline; filename="' . $backup_file . '"');
                     header('Content-Disposition: attachment; filename=' . $backup_file);
@@ -497,7 +497,7 @@ if (zen_not_null($action)) {
                         $delete_sql = unlink($restore_from);
                         $messageStack->add_session($delete_sql ? TEXT_TEMP_SQL_DELETED : TEXT_TEMP_SQL_NOT_DELETED, $delete_sql ? 'success' : 'error');
                     }
-                } elseif ($load_results == '127') {//127 = command not found
+                } elseif ($load_results === 127) {//127 = command not found
                     $messageStack->add_session(FAILURE_DATABASE_NOT_RESTORED_UTIL_NOT_FOUND);
                 } else {
                     $messageStack->add_session(FAILURE_DATABASE_NOT_RESTORED);
@@ -530,7 +530,7 @@ if (zen_not_null($action)) {
             break;
 
         case 'deleteconfirm':
-            if (strpos($_GET['file'], '..') !== false) {
+            if (str_contains($_GET['file'], '..')) {
                 zen_redirect(zen_href_link(FILENAME_BACKUP_MYSQL));
             }
 
@@ -675,7 +675,7 @@ if (zen_not_null($action)) {
                                     </td>
                                     <td class="dataTableContent center"><?php
                                         if (isset($buInfo) && is_object($buInfo) && ($entry === $buInfo->file)) {
-                                            echo zen_image(DIR_WS_IMAGES . 'icon_arrow_right.gif', '');
+                                            echo zen_image(DIR_WS_IMAGES . 'icon_arrow_right.gif');
                                         } else {
                                             echo '<a href="' . zen_href_link(FILENAME_BACKUP_MYSQL, 'file=' . $entry) . '">' . zen_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>';
                                         }
