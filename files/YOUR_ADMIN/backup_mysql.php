@@ -2,9 +2,15 @@
 $debug = false; //anything except false will show debug info
 //
 //Cron tried but admin path error/not used
-//usr/local/bin/ea-php71 -c /home/motorvista/public_html/tienda/aGaqvp2xwM3p3fGZE/php.ini -q /home/motorvista/public_html/tienda/aGaqvp2xwM3p3fGZE/backup_mysql.php
-//
-// $Id: backup_mysql.php modified 2020-11-23 torvista $
+//usr/local/bin/ea-php71 -c /home/motorvista/public_html/SHOP/php.ini -q /home/motorvista/public_html/tienda/aGaqvp2xwM3p3fGZE/backup_mysql.php
+/**for phpStorm inspections
+ * @array $_SESSION['messageToStack']
+ * @var messageStack $messageStack
+ * @var zcObserverLogEventListener $zco_notifier
+ * @var products $zc_products
+ * @var queryFactory $db
+ */
+// $Id: backup_mysql.php modified 2021-07-20 torvista $
 //
 //
 //Windows System Error Codes https://msdn.microsoft.com/en-us/library/windows/desktop/ms681381(v=vs.85).aspx
@@ -455,7 +461,7 @@ if (zen_not_null($action)) {
                 if ($debug) {
                     $messageStack->add_session(TEXT_COMMAND . $toolfilename . ' ' . $load_params, 'caution');
                 }
-                $resultcodes = exec($toolfilename . $load_params, $output, $load_results);//$output gets filled with an array oall the normally displayed dialogue that comes back from the command, $load_results
+                $resultcodes = exec($toolfilename . $load_params, $output, $load_results);//$output gets filled with an array of all the normally displayed dialogue that comes back from the command, $load_results is an integer of the execution result
                 exec('exit(0)');
 
                 // parse the value that comes back from the script
