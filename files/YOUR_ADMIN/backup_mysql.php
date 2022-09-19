@@ -1,8 +1,9 @@
 <?php
+//declare(strict_types=1);
 $debug = false; //anything except false will show debug info
 //
 //Cron tried but admin path error/not used
-//usr/local/bin/ea-php71 -c /home/motorvista/public_html/SHOP/php.ini -q /home/motorvista/public_html/tienda/aGaqvp2xwM3p3fGZE/backup_mysql.php
+//usr/local/bin/ea-php71 -c /home/motorvista/public_html/SHOP/php.ini -q /home/motorvista/public_html/SHOP/ADMIN/backup_mysql.php
 /**for phpStorm inspections
  * @array $_SESSION['messageToStack']
  *
@@ -18,8 +19,8 @@ $debug = false; //anything except false will show debug info
 //UNIX Exit codes http://www.faqs.org/docs/abs/HTML/exitcodes.html
 require('includes/application_top.php');
 
-define('LINK_ERROR_CODES_WIN', 'https://msdn.microsoft.com/en-us/library/windows/desktop/ms681381(v=vs.85).aspx');
-define('LINK_ERROR_CODES_NIX', 'http://www.faqs.org/docs/abs/HTML/exitcodes.html');
+const LINK_ERROR_CODES_WIN = 'https://msdn.microsoft.com/en-us/library/windows/desktop/ms681381(v=vs.85).aspx';
+const LINK_ERROR_CODES_NIX = 'http://www.faqs.org/docs/abs/HTML/exitcodes.html';//yes http
 
 if (stripos(PHP_OS_FAMILY, "win") !== false) { //Windows
     $os = 'win';
@@ -233,6 +234,11 @@ if (zen_not_null($action)) {
             }
 
             $backup_file = 'db_' . DB_DATABASE . '-' . ($tables_to_export !== '' ? 'limited-' : '') . date('Y-m-d_H-i-s') . $suffix . '.sql';
+            /* this parameter needed for cron backup, but not here, although same db
+            //echo "MySQL version=" . mysqli_get_client_version();die;
+            $mysql_version = (int)(mysqli_get_client_version()/10000);
+            $dump_params .= $mysql_version >= 8 ? ' --column-statistics=0 ' : ''; //default parameter in mysqldump 8 https://serverfault.com/questions/912162/mysqldump-throws-unknown-table-column-statistics-in-information-schema-1109
+             */
             $dump_params .= ' --host=' . DB_SERVER;
             $dump_params .= ' --user=' . DB_SERVER_USERNAME;
             //$dump_params .= ' --password="' . DB_SERVER_PASSWORD . '"';//WIN DEFINITELY needs double quotes around the filename when shell metacharacters *%&$& etc. are in the password
@@ -333,12 +339,16 @@ if (zen_not_null($action)) {
                         break;
                     case 'zip':
                         exec(LOCAL_EXE_ZIP . ' -j ' . DIR_FS_BACKUP . $backup_file . '.zip ' . DIR_FS_BACKUP . $backup_file);
-                        if (file_exists(DIR_FS_BACKUP . $backup_file) && file_exists(DIR_FS_BACKUP . $backup_file . 'zip')) {
+                        if (file_exists(DIR_FS_BACKUP . $backup_file) && file_exists(DIR_FS_BACKUP . $backup_file . 'zip')) {//steve TODO is this zip missing the dot
                             unlink(DIR_FS_BACKUP . $backup_file);
                         }
                         $backup_file .= '.zip';
                 }
-
+               /* if (file_exists(DIR_FS_BACKUP . $backup_file)) {
+                    echo 'FOUND $backup_file=' . DIR_FS_BACKUP . $backup_file; die;
+                } else{
+                    echo 'NOT FOUND $backup_file=' . DIR_FS_BACKUP . $backup_file;die;
+                }*/
                 if (str_contains($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
                     header('Content-Type: application/octetstream');
 //            header('Content-Disposition: inline; filename="' . $backup_file . '"');
