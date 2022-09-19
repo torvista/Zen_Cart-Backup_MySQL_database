@@ -1,5 +1,6 @@
 <?php
 //declare(strict_types=1);
+//torvista 19/09/2022
 $debug = false; //anything except false will show debug info
 if ($debug) {
     ini_set('display_errors', '1');
@@ -51,6 +52,12 @@ if (!function_exists('mv_printVar')) {
         echo '</pre><br>';
     }
 }
+
+class backup_mysql_objectInfo extends objectInfo {
+    public string $compression;
+    public string $date;
+    public string $file;
+    public string $size;
 }
 
 const LINK_ERROR_CODES_WIN = 'https://msdn.microsoft.com/en-us/library/windows/desktop/ms681381(v=vs.85).aspx';
@@ -706,7 +713,7 @@ if (zen_not_null($action)) {
                                                 break;
                                         }
 
-                                        $buInfo = new objectInfo($file_array);
+                                        $buInfo = new backup_mysql_objectInfo($file_array);
                                     }
 
                                     if (isset($buInfo) && is_object($buInfo) && ($entry === $buInfo->file)) {
