@@ -1,7 +1,11 @@
 <?php
 //declare(strict_types=1);
 $debug = false; //anything except false will show debug info
-//
+if ($debug) {
+    ini_set('display_errors', '1');
+    ini_set('display_startup_errors', '1');
+    error_reporting(E_ALL);
+}
 //Cron tried but admin path error/not used
 //usr/local/bin/ea-php71 -c /home/motorvista/public_html/SHOP/php.ini -q /home/motorvista/public_html/SHOP/ADMIN/backup_mysql.php
 /**for phpStorm inspections
@@ -18,6 +22,35 @@ $debug = false; //anything except false will show debug info
 //Windows System Error Codes https://msdn.microsoft.com/en-us/library/windows/desktop/ms681381(v=vs.85).aspx
 //UNIX Exit codes http://www.faqs.org/docs/abs/HTML/exitcodes.html
 require('includes/application_top.php');
+//steve debugging function
+if (!function_exists('mv_printVar')) {
+    /**
+     * @param $a
+     */
+    function mv_printVar($a)
+    {
+        $backtrace = debug_backtrace()[0];
+        $fh = fopen($backtrace['file'], 'rb');
+        $line = 0;
+        $code = '';
+        while (++$line <= $backtrace['line']) {
+            $code = fgets($fh);
+        }
+        fclose($fh);
+        if ($code !== false) {
+            preg_match('/' . __FUNCTION__ . '\s*\((.*)\)\s*;/u', $code, $name);
+        } else {
+            $name = '';
+        }
+        echo '<pre>';
+        if (!empty($name[1])) {
+            echo '<strong>' . trim($name[1]) . '</strong> (' . gettype($a) . "):\n";
+        }
+        //var_export($a);
+        print_r($a);
+        echo '</pre><br>';
+    }
+}
 
 const LINK_ERROR_CODES_WIN = 'https://msdn.microsoft.com/en-us/library/windows/desktop/ms681381(v=vs.85).aspx';
 const LINK_ERROR_CODES_NIX = 'http://www.faqs.org/docs/abs/HTML/exitcodes.html';//yes http
@@ -293,7 +326,7 @@ if (zen_not_null($action)) {
             // parse the value that comes back from the script
             if (zen_not_null($resultcodes)) {
                 if ($debug) {
-                    $messageStack->add_session('$resultcodes:' . '<br>' . mv_printVar($resultcodes));
+                    $messageStack->add_session('$resultcodes:' . '<br>' . mv_printVar($resultcodes));//steve using custom function
                 }
                 [$strA, $strB] = array_pad(explode('|', $resultcodes, 2), 2, null);//steve php notice when only one value
                 //$array = print_r($resultcodes, true);if ($debug) $messageStack->add('$resultcodes: ' . $array, 'error');
