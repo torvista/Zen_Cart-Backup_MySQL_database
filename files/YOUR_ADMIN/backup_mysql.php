@@ -27,7 +27,7 @@ if (!function_exists('mv_printVar')) {
     /**
      * @param $a
      */
-    function mv_printVar($a)
+    function mv_printVar($a): void
     {
         $backtrace = debug_backtrace()[0];
         $fh = fopen($backtrace['file'], 'rb');
@@ -51,6 +51,7 @@ if (!function_exists('mv_printVar')) {
         echo '</pre><br>';
     }
 }
+}
 
 const LINK_ERROR_CODES_WIN = 'https://msdn.microsoft.com/en-us/library/windows/desktop/ms681381(v=vs.85).aspx';
 const LINK_ERROR_CODES_NIX = 'http://www.faqs.org/docs/abs/HTML/exitcodes.html';//yes http
@@ -70,7 +71,7 @@ $dump_params = '';
 $tables_to_export = !empty($_GET['tables']) ? str_replace(',', ' ', $_GET['tables']) : ''; //unused!!
 $redirect = !empty($_GET['returnto']) ? $_GET['returnto'] : ''; //unused!!
 $resultcodes = '';
-$_POST['compress'] = (isset($_REQUEST['compress'])) ? $_REQUEST['compress'] : false;
+$_POST['compress'] = $_REQUEST['compress'] ?? false;
 $strA = '';
 $strB = '';
 $restore_from = '';
@@ -385,7 +386,8 @@ if (zen_not_null($action)) {
                 if (str_contains($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
                     header('Content-Type: application/octetstream');
 //            header('Content-Disposition: inline; filename="' . $backup_file . '"');
-                    header('Content-Disposition: attachment; filename=' . $backup_file);
+                    header('Content-Disposition: attachment; filename="' . $backup_file . '"');//steve added double quotes
+                    header('Content-Length: ' . filesize(DIR_FS_BACKUP . $backup_file));//steve added
                     header('Expires: Mon, 26 Jul 2001 05:00:00 GMT');
                     header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
                     header('Cache-Control: must_revalidate, post-check=0, pre-check=0');
@@ -393,15 +395,25 @@ if (zen_not_null($action)) {
                     header('Cache-control: private');
                 } else {
                     header('Content-Type: application/x-octet-stream');
-                    header('Content-Disposition: attachment; filename=' . $backup_file);
+                    header('Content-Disposition: attachment; filename="' . $backup_file . '"');//steve added double quotes
+                    header('Content-Length: ' . filesize(DIR_FS_BACKUP . $backup_file));//steve added
                     header('Expires: Mon, 26 Jul 2001 05:00:00 GMT');
                     header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
                     header('Pragma: no-cache');
                 }
-
+                //steve for PHP Fatal error:  Allowed memory size of 536870912 bytes exhausted Cannot use output buffering in output buffering display handlers in Unknown on line 0
+                //also needs as well header('Content-Length: ' . filesize($backup_file));
+                if (ob_get_level()) {
+                    ob_end_clean();
+                }
                 readfile(DIR_FS_BACKUP . $backup_file);
-                unlink(DIR_FS_BACKUP . $backup_file);
-
+                $dumpfile_deleted = unlink(DIR_FS_BACKUP . $backup_file);
+                /* steve todo dumpfile not being deleted, review compression duplication
+                 * if ($dumpfile_deleted) {
+                    $messageStack->add_session('dumpfile deleted');
+                } else {
+                    $messageStack->add_session('dumpfile NOT deleted:' . DIR_FS_BACKUP . $backup_file);
+                }*/
                 exit;
             }
 
@@ -440,7 +452,7 @@ if (zen_not_null($action)) {
                     switch ($extension) {
                         case 'sql':
                             $restore_from = $restore_file;
-                            $remove_raw = false;
+                            //$remove_raw = false; //steve already false
                             break;
 
                         case '.gz':
@@ -451,14 +463,19 @@ if (zen_not_null($action)) {
                             }
                             if ($os === 'win') {
                                 //if ($debug) $messageStack->add('os='.$os, 'success');
-                                $sfp = gzopen($restore_file, "rb");
-                                $fp = fopen($restore_from, 'wb');
-                                while (!gzeof($sfp)) {
-                                    $string = gzread($sfp, 4096);
-                                    fwrite($fp, $string, strlen($string));
+                                $sfp = @gzopen($restore_file, "rb");//silenced as error is handled
+                                if ($sfp !== false) {
+                                    $fp = fopen($restore_from, 'wb');
+
+                                    while (!gzeof($sfp)) {
+                                        $string = gzread($sfp, 4096);
+                                        fwrite($fp, $string, strlen($string));
+                                    }
+                                    gzclose($sfp);
+                                    fclose($fp);
+                                } else {
+                                    $messageStack->add_session('gzopen: Failed to open stream:' . $restore_file);
                                 }
-                                gzclose($sfp);
-                                fclose($fp);
                             }
                             $remove_raw = true;
                             break;
@@ -673,7 +690,7 @@ if (zen_not_null($action)) {
                                     $entry = $contents[$i];
                                     $check = 0;
 
-                                    if ((!isset($_GET['file']) || (isset($_GET['file']) && ($_GET['file'] === $entry))) && !isset($buInfo) && ($action !== 'backup') && ($action !== 'restorelocal')) {
+                                    if ((!isset($_GET['file']) || $_GET['file'] === $entry) && !isset($buInfo) && $action !== 'backup' && $action !== 'restorelocal') {
                                         $file_array['file'] = $entry;
                                         $file_array['date'] = date(PHP_DATE_TIME_FORMAT, filemtime(DIR_FS_BACKUP . $entry));
                                         $file_array['size'] = number_format(filesize(DIR_FS_BACKUP . $entry)) . ' bytes';
