@@ -7,7 +7,7 @@ if ($debug) {
     error_reporting(E_ALL);
 }
 //Cron tried but admin path error/not used
-//usr/local/bin/ea-php71 -c /home/motorvista/public_html/SHOP/php.ini -q /home/motorvista/public_html/SHOP/ADMIN/backup_mysql.php
+//usr/local/bin/ea-php71 -c /home/PATH/SHOP/php.ini -q /PATH/SHOP/ADMIN/backup_mysql.php
 /**for phpStorm inspections
  * @array $_SESSION['messageToStack']
  *
@@ -618,8 +618,8 @@ if (zen_not_null($action)) {
                         ?></td>
                     <td class="smallText right">
                         <a href="https://github.com/torvista/zen-cart_Backup-MySQL-database" target="_blank"><?php echo TEXT_GITHUB_SUPPORT; ?></a><br>
-                        <a href="http://www.zen-cart.com/showthread.php?35714-Backup-MySQL-Database" target="_blank"><?php echo TEXT_ZC_SUPPORT; ?></a><br>
-                        <a href="http://www.zen-cart.com/downloads.php?do=file&amp;id=7" target="_blank"><?php echo TEXT_ZC_PLUGIN_DOWNLOAD; ?></a>
+                        <a href="https://www.zen-cart.com/showthread.php?35714-Backup-MySQL-Database" target="_blank"><?php echo TEXT_ZC_SUPPORT; ?></a><br>
+                        <a href="https://www.zen-cart.com/downloads.php?do=file&amp;id=7" target="_blank"><?php echo TEXT_ZC_PLUGIN_DOWNLOAD; ?></a>
                     </td>
                 </tr>
                 <?php
