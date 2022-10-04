@@ -892,14 +892,11 @@ if (zen_not_null($action)) {
                                 'form' => zen_draw_form('restore', FILENAME_BACKUP_MYSQL, 'action=restorelocalnow', 'post', 'enctype="multipart/form-data"')
                             ];
                             $contents[] = [
-                                'text' => TEXT_INFO_RESTORE_LOCAL . '<br><br>' . TEXT_INFO_BEST_THROUGH_HTTPS
-                            ];
+                                'text' => TEXT_INFO_RESTORE_LOCAL_RAW_FILE . '<br>' . TEXT_INFO_BEST_THROUGH_HTTPS . '<br>' . TEXT_INFO_RESTORE_LOCAL];
                             $contents[] = [
                                 'text' => '<br>' . zen_draw_file_field('sql_file')//browser decides button language (cannot be forced by external means)
                             ];
-                            $contents[] = [
-                                'text' => TEXT_INFO_RESTORE_LOCAL_RAW_FILE
-                            ];
+
                             $contents[] = [
                                 'align' => 'center',
                                 'text' => '<br>' . zen_image_submit('button_restore.gif', IMAGE_RESTORE) . '&nbsp;<a href="' . zen_href_link(FILENAME_BACKUP_MYSQL) . '">'
