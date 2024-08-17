@@ -1,3 +1,5 @@
+# August 2024: Most of this has been ported to the plugin version: https://github.com/torvista/Zen_Cart-Backup_MYSQL_Plugin
+
 # Backup MySQL for Zen Cart
 
 Plugin: BACKUP_MYSQL Admin Tool 
